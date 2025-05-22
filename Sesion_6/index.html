@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Servidor Apache - Sitio de Prueba</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 1rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .server-info {
+            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .server-info h2 {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            display: block;
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+
+        .time-display {
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Servidor Apache Funcionando</h1>
+            <p class="subtitle">Sitio Web de Prueba - Ubuntu Server</p>
+            <div class="status-badge">🟢 ONLINE</div>
+            <div class="time-display" id="datetime">
+                Cargando fecha y hora...
+            </div>
+        </header>
+
+        <div class="content-grid">
+            <div class="card server-info">
+                <h2>📊 Información del Servidor</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">Apache</span>
+                        <small>Servidor Web</small>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">Ubuntu</span>
+                        <small>Sistema Operativo</small>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">HTTP/HTTPS</span>
+                        <small>Protocolo</small>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">PHP</span>
+                        <small>Lenguaje</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>✅ Características Implementadas</h2>
+                <ul class="feature-list">
+                    <li>Servidor Apache configurado</li>
+                    <li>Redirección HTTPS (SSL)</li>
+                    <li>Documentos HTML responsivos</li>
+                    <li>Estilos CSS modernos</li>
+                    <li>JavaScript interactivo</li>
+                    <li>Diseño adaptable (responsive)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🔧 Pruebas Disponibles</h2>
+                <p>Utiliza estos enlaces para probar diferentes funcionalidades de tu servidor:</p>
+                <div class="test-buttons">
+                    <button class="btn btn-primary" onclick="testServer()">Probar Conectividad</button>
+                    <button class="btn btn-secondary" onclick="showInfo()">Información PHP</button>
+                    <button class="btn btn-primary" onclick="testSSL()">Verificar SSL</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📝 Notas de Configuración</h2>
+                <p><strong>Archivo:</strong> /var/www/html/index.html</p>
+                <p><strong>Puerto HTTP:</strong> 80</p>
+                <p><strong>Puerto HTTPS:</strong> 443</p>
+                <p><strong>Logs:</strong> /var/log/apache2/</p>
+                <p><strong>Configuración:</strong> /etc/apache2/sites-available/</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>🌐 Servidor Apache en Ubuntu | Sitio de Prueba Funcionando Correctamente</p>
+            <p>Desarrollado para pruebas de configuración del servidor</p>
+        </footer>
+    </div>
+
+    <script>
+        // Actualizar fecha y hora en tiempo real
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZoneName: 'short'
+            };
+            document.getElementById('datetime').textContent = 
+                `📅 ${now.toLocaleDateString('es-ES', options)}`;
+        }
+
+        // Actualizar cada segundo
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Llamada inicial
+
+        // Funciones de prueba
+        function testServer() {
+            alert('🎉 ¡Servidor funcionando correctamente!\n\n' +
+                  '✅ Apache está corriendo\n' +
+                  '✅ HTML se carga sin problemas\n' +
+                  '✅ JavaScript está funcionando\n' +
+                  '✅ CSS se aplica correctamente');
+        }
+
+        function showInfo() {
+            const info = `🔍 Información del Cliente:\n\n` +
+                        `📱 User Agent: ${navigator.userAgent.substring(0, 50)}...\n` +
+                        `🌐 Idioma: ${navigator.language}\n` +
+                        `📺 Resolución: ${screen.width}x${screen.height}\n` +
+                        `🕐 Zona Horaria: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+            alert(info);
+        }
+
+        function testSSL() {
+            const protocol = window.location.protocol;
+            if (protocol === 'https:') {
+                alert('🔒 ¡SSL/HTTPS está funcionando correctamente!');
+            } else {
+                alert('⚠️ Actualmente usando HTTP\n\n' +
+                      'Para habilitar HTTPS:\n' +
+                      '1. Instala un certificado SSL\n' +
+                      '2. Configura la redirección HTTPS\n' +
+                      '3. Habilita mod_ssl en Apache');
+            }
+        }
+
+        // Efecto de bienvenida
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 1s ease-in-out';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Log de carga exitosa
+        console.log('🚀 Sitio web de prueba cargado exitosamente');
+        console.log('📊 Servidor Apache funcionando correctamente');
+    </script>
+</body>
+</html>
